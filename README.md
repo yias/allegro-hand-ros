@@ -4,7 +4,7 @@ Allegro Hand ROS catkin build
 ================================
 
 This is an official release to control Allegro Hand with ROS Indigo or later.
-Mostly, it is based on the work by Felix Duballet. Thank you for the contribution.
+Mostly, it is based on the old release of Allegro Hand ros package and the interfaces has been improved much by Felix Duballet from EPFL. Thank you for the contribution.
 
 You can find old release of the [hand ros package][1].
 [1]: https://github.com/simlabrobotics/allegro_hand_ros
