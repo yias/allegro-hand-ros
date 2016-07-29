@@ -6,7 +6,7 @@ Allegro Hand ROS catkin build
 This is an official release to control Allegro Hand with ROS Indigo or later.
 Mostly, it is based on the work by Felix Duballet. Thank you for the contribution.
 
-You can find old release of the [hand ros package][1]
+You can find old release of the [hand ros package][1].
 [1]: https://github.com/simlabrobotics/allegro_hand_ros
 
 It improves significantly upon the old release by providing a catkin-ized
@@ -104,7 +104,7 @@ Packages
  * **bhand** Library files for the predefined grasps, available in 32 and 64 bit
      versions. 64 bit by default, update symlink for 32 bit.
 
-Note on polling (from SimLabs): The preferred sampling method is utilizing the
+Note on polling (from Wonik Robotics): The preferred sampling method is utilizing the
 Hand's own real time clock running @ 333Hz by polling the CAN communication
 (polling = true, default). In fact, ROS's interrupt/sleep combination might
 cause instability in CAN communication resulting unstable hand motions.
@@ -113,7 +113,7 @@ cause instability in CAN communication resulting unstable hand motions.
 Useful Links
 ------------
 
- * [Allegro Hand wiki](http://www.simlab.co.kr/AllegroHand/wiki).
+ * [Allegro Hand wiki](http://wiki.wonikrobotics/AllegroHand/wiki).
  * [ROS wiki for original package](http://www.ros.org/wiki/allegro_hand_ros).
 
 
