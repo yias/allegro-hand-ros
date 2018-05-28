@@ -309,6 +309,7 @@ void AllegroHandDrv::_readDevices()
         _parseMessage(cmd, src, des, len, data);
         err = CANAPI::can_read_message(_can_handle, &cmd, &src, &des, &len, data, 0, 0);
     }
+    //ROS_ERROR("can_read_message returns %d.", err); // PCAN_ERROR_QRCVEMPTY(32) from Peak CAN means "Receive queue is empty". It is not an error.
 }
 
 void AllegroHandDrv::_writeDevices()
