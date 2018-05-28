@@ -9,7 +9,7 @@ hand_info:
  manufacturer: 'Wonikrobotics Co. Ltd.'
  origin: 'Seoul, South Korea'
  serial: 'SAH030C034R'
- version: v3.0
+ version: 3.0
 input_voltage: 8
 
 zero:
