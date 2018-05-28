@@ -33,12 +33,12 @@
  */
 
 /*
- * 	@file AllegroHandDrv.h
+ *  @file AllegroHandDrv.h
  *  @brief Allegro Hand Driver
  *
- *  Created on: 		July 29, 2016
- *  Added to Project: 	July 29, 2016
- *  Author: 			Sean Yi
+ *  Created on:         July 29, 2016
+ *  Added to Project:   July 29, 2016
+ *  Author:             Sean Yi
  *  Maintained by:      Sean Yi(seanyi@wonikrobotics.com)
  */
 #ifndef __ALLEGROHAND_DRV_H__
@@ -58,7 +58,7 @@ public:
     AllegroHandDrv();
     ~AllegroHandDrv();
 
-    void init(int mode = 0);                ///< initialize Allegro Hand driver and CAN channel
+    bool init(int mode = 0);                ///< initialize Allegro Hand driver and CAN channel
     int update(void);                       ///< update this driver periodically (user code should call this function)
 
     void setTorque(double *torque);         ///< set desired joint torque

@@ -33,12 +33,12 @@
  */
 
 /*
- * 	@file AllegroHandDrv.cpp
+ *  @file AllegroHandDrv.cpp
  *  @brief Allegro Hand Driver
  *
- *  Created on: 		Nov 15, 2012
- *  Added to Project: 	Jan 17, 2013
- *  Author: 			Sean Yi, K.C.Chang, Seungsu Kim, & Alex Alspach
+ *  Created on:         Nov 15, 2012
+ *  Added to Project:   Jan 17, 2013
+ *  Author:             Sean Yi, K.C.Chang, Seungsu Kim, & Alex Alspach
  *  Maintained by:      Sean Yi(seanyi@wonikrobotics.com)
  */
 
@@ -69,7 +69,7 @@ namespace allegro
 {
 
 AllegroHandDrv::AllegroHandDrv()
-    : _can_handle(NULL)
+    : _can_handle(0)
     , _curr_position_get(0)
     , _emergency_stop(false)
 {
@@ -185,11 +185,13 @@ AllegroHandDrv::AllegroHandDrv()
 
 AllegroHandDrv::~AllegroHandDrv()
 {
-    ROS_INFO("CAN: System Off");
-    CANAPI::sys_stop(_can_handle);
-    usleep(10000);
-    ROS_INFO("CAN: Close CAN channel");
-    CANAPI::can_close(_can_handle);
+    if (_can_handle != 0) {
+        ROS_INFO("CAN: System Off");
+        CANAPI::sys_stop(_can_handle);
+        usleep(10000);
+        ROS_INFO("CAN: Close CAN channel");
+        CANAPI::can_close(_can_handle);
+    }
 }
 
 // trim from end. see http://stackoverflow.com/a/217605/256798
@@ -201,7 +203,7 @@ static inline std::string &rtrim(std::string &s)
     return s;
 }
 
-void AllegroHandDrv::init(int mode)
+bool AllegroHandDrv::init(int mode)
 {
     string CAN_CH;
     ros::param::get("~comm/CAN_CH", CAN_CH);
@@ -209,11 +211,13 @@ void AllegroHandDrv::init(int mode)
 
     if (CAN_CH.empty()) {
         ROS_ERROR("Invalid (empty) CAN channel, cannot proceed. Check PCAN comms.");
-        return;
+        return false;
     }
 
-    if (CANAPI::can_open_with_name(_can_handle, CAN_CH.c_str()))
-        return;
+    if (CANAPI::can_open_with_name(_can_handle, CAN_CH.c_str())) {
+        _can_handle = 0;
+        return false;
+    }
 
     ROS_INFO("CAN: Flush CAN receive buffer");
     CANAPI::can_flush(_can_handle);
@@ -239,6 +243,8 @@ void AllegroHandDrv::init(int mode)
     usleep(100);
 
     ROS_INFO("CAN: Communicating");
+
+    return true;
 }
 
 int AllegroHandDrv::update(void)
@@ -400,10 +406,8 @@ void AllegroHandDrv::_parseMessage(char cmd, char src, char des, int len, unsign
 
     default:
         ROS_WARN("unknown command %d, src %d, to %d, len %d", cmd, src, des, len);
-        /*
         for(int nd=0; nd<len; nd++)
             printf("%d \n ", data[nd]);
-        */
         return;
     }
 }

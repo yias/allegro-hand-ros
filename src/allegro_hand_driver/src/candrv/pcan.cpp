@@ -33,12 +33,12 @@
  */
 
 /*
- * 	@file pcan.cpp
+ *  @file pcan.cpp
  *  @brief CAN API implementation to support PEAK CAN interface
  *
- *  Created on: 		July 29, 2016
- *  Added to Project: 	July 29, 2016
- *  Author: 			Sean Yi
+ *  Created on:         July 29, 2016
+ *  Added to Project:   July 29, 2016
+ *  Author:             Sean Yi
  *  Maintained by:      Sean Yi(seanyi@wonikrobotics.com)
  */
 
@@ -195,7 +195,7 @@ int can_open_with_name(void*& ch, const char* dev_name)
         return -1;
     }
     else {
-        ROS_INFO("CAN: Channel %s is opend successfully", dev_name);
+        ROS_INFO("CAN: Channel %s(channel:=%d) is opend successfully", dev_name, *((int*)ch));
     }
 
     err = canInit(ch);

@@ -10,7 +10,7 @@ hand_info:
  origin: 'Seoul, South Korea'
  serial: 'SAH030C034R'
  version: v3.0
- input_voltage: 8
+input_voltage: 8
 
 zero:
  encoder_offset:

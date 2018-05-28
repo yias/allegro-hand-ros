@@ -33,12 +33,12 @@
  */
 
 /*
- * 	@file candef.h
+ *  @file candef.h
  *  @brief definition of constants used by CAN API
  *
- *  Created on: 		July 29, 2016
+ *  Created on:         July 29, 2016
  *  Added to Project: 	July 29, 2016
- *  Author: 			Sean Yi
+ *  Author:             Sean Yi
  *  Maintained by:      Sean Yi(seanyi@wonikrobotics.com)
  */
 

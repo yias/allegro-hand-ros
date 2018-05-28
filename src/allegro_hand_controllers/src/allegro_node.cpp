@@ -47,11 +47,17 @@ AllegroNode::AllegroNode(bool sim /* = false */) {
   ros::param::get("~hand_info/version", version);
 
   // Initialize CAN device
+  canDevice = 0;
   if(!sim) {
     canDevice = new allegro::AllegroHandDrv();
-    canDevice->init();
-    usleep(3000);
-    updateWriteReadCAN();
+    if (canDevice->init()) {
+        usleep(3000);
+        updateWriteReadCAN();
+    }
+    else {
+        delete canDevice;
+        canDevice = 0;
+    }
   }
 
   // Start ROS time
@@ -65,7 +71,7 @@ AllegroNode::AllegroNode(bool sim /* = false */) {
 }
 
 AllegroNode::~AllegroNode() {
-  delete canDevice;
+  if (canDevice) delete canDevice;
   delete mutex;
   nh.shutdown();
 }
@@ -89,9 +95,11 @@ void AllegroNode::publishData() {
 
 void AllegroNode::updateWriteReadCAN() {
   // CAN bus communication.
-  canDevice->setTorque(desired_torque);
-  lEmergencyStop = canDevice->update();
-  canDevice->getJointInfo(current_position);
+  if (canDevice) {
+    canDevice->setTorque(desired_torque);
+    lEmergencyStop = canDevice->update();
+    canDevice->getJointInfo(current_position);
+  }
 
   if (lEmergencyStop < 0) {
     // Stop program when Allegro Hand is switched off
