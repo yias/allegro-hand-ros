@@ -8,9 +8,6 @@
 //
 // Simulated is probably a generous term, this is simply a pass-through for
 // joint states: commanded -> current.
-//
-// It works by overriding updateWriteReadCAN and setting the current position in
-// computeDesiredTorque.
 class AllegroNodeSim : public AllegroNode {
 
  public:
@@ -25,8 +22,6 @@ class AllegroNodeSim : public AllegroNode {
   void initController(const std::string &whichHand);
 
   void computeDesiredTorque();
-
-  void updateWriteReadCAN();
 
  protected:
 };

@@ -98,7 +98,7 @@ AllegroHandNode::AllegroHandNode(bool sim /* = false */) {
   // Advertise current joint state publisher and subscribe to desired joint
   // states.
   joint_state_pub = nh.advertise<sensor_msgs::JointState>(JOINT_STATE_TOPIC, 3);
-  joint_cmd_sub_ = nh.subscribe(DESIRED_STATE_TOPIC, 1, // queue size
+  joint_cmd_sub = nh.subscribe(DESIRED_STATE_TOPIC, 1, // queue size
                                 &AllegroNode::desiredStateCallback, this);
 }
 
@@ -110,7 +110,7 @@ AllegroHandNode::~AllegroHandNode() {
 
 void AllegroHandNode::desiredStateCallback(const sensor_msgs::JointState &msg) {
   mutex->lock();
-  desired_joint_state_ = msg;
+  desired_joint_state = msg;
   mutex->unlock();
 }
 

@@ -78,7 +78,7 @@ AllegroNodeUName::~AllegroNodeUName() {
 void AllegroNodeUName::computeDesiredTorque() {
   // Just set current = desired.
   for (int idx = 0; idx < DOF_JOINTS; ++idx) {
-    current_position[idx] = desired_joint_state_.position[idx];
+    current_position[idx] = desired_joint_state.position[idx];
   }
 }
 
@@ -92,10 +92,10 @@ void AllegroNodeUName::initController(const std::string &whichHand) {
     ROS_INFO("CTRL: Initial Pose loaded from param server.");
     double tmp;
     mutex->lock();
-    desired_joint_state_.position.resize(DOF_JOINTS);
+    desired_joint_state.position.resize(DOF_JOINTS);
     for (int i = 0; i < DOF_JOINTS; i++) {
       ros::param::get(initialPosition[i], tmp);
-      desired_joint_state_.position[i] = DEGREES_TO_RADIANS(tmp);
+      desired_joint_state.position[i] = DEGREES_TO_RADIANS(tmp);
     }
     mutex->unlock();
   }
@@ -106,9 +106,9 @@ void AllegroNodeUName::initController(const std::string &whichHand) {
 
     // Home position
     mutex->lock();
-    desired_joint_state_.position.resize(DOF_JOINTS);
+    desired_joint_state.position.resize(DOF_JOINTS);
     for (int i = 0; i < DOF_JOINTS; i++)
-      desired_joint_state_.position[i] = DEGREES_TO_RADIANS(home_pose[i]);
+      desired_joint_state.position[i] = DEGREES_TO_RADIANS(home_pose[i]);
     mutex->unlock();
   }
 

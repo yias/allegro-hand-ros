@@ -37,8 +37,6 @@ class AllegroNode {
 
   void desiredStateCallback(const sensor_msgs::JointState &desired);
 
-  virtual void updateWriteReadCAN();
-
   virtual void updateController();
 
   // This is the main method that must be implemented by the various
@@ -70,11 +68,11 @@ class AllegroNode {
   // ROS stuff
   ros::NodeHandle nh;
   ros::Publisher joint_state_pub;
-  ros::Subscriber joint_cmd_sub_;
+  ros::Subscriber joint_cmd_sub;
 
   // Store the current and desired joint states.
   sensor_msgs::JointState current_joint_state;
-  sensor_msgs::JointState desired_joint_state_;
+  sensor_msgs::JointState desired_joint_state;
 
   // ROS Time
   ros::Time tstart;

@@ -247,21 +247,37 @@ bool AllegroHandDrv::init(int mode)
     return true;
 }
 
-int AllegroHandDrv::update(void)
+int AllegroHandDrv::readCANFrames()
 {
     if (_emergency_stop)
         return -1;
 
     _readDevices();
-    usleep(10);
+    //usleep(10);
+
+    return 0;
+}
+
+int AllegroHandDrv::writeJointTorque()
+{
     _writeDevices();
 
     if (_emergency_stop) {
-        ROS_ERROR("Emergency stop in update()");
+        ROS_ERROR("Emergency stop in writeJointTorque()");
         return -1;
     }
 
     return 0;
+}
+
+bool AllegroHandDrv::isJointInfoReady()
+{
+    return (_curr_position_get == (0x01 | 0x02 | 0x04 | 0x08));
+}
+
+void AllegroHandDrv::resetJointInfoReady()
+{
+    _curr_position_get = 0;
 }
 
 void AllegroHandDrv::setTorque(double *torque)
@@ -317,7 +333,7 @@ void AllegroHandDrv::_writeDevices()
     double pwmDouble[DOF_JOINTS];
     short pwm[DOF_JOINTS];
 
-    if (!(_curr_position_get == (0x01 | 0x02 | 0x04 | 0x08)))
+    if (!isJointInfoReady())
         return;
 
     // convert to torque to pwm
@@ -339,8 +355,6 @@ void AllegroHandDrv::_writeDevices()
         CANAPI::write_current(_can_handle, findex, &pwm[findex*4]);
         //ROS_INFO("write torque %d: %d %d %d %d", findex, pwm[findex*4+0], pwm[findex*4+1], pwm[findex*4+2], pwm[findex*4+3]);
     }
-
-    _curr_position_get = 0;
 }
 
 void AllegroHandDrv::_parseMessage(char cmd, char src, char des, int len, unsigned char* data)

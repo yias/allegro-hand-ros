@@ -59,7 +59,6 @@ public:
     ~AllegroHandDrv();
 
     bool init(int mode = 0);                ///< initialize Allegro Hand driver and CAN channel
-    int update(void);                       ///< update this driver periodically (user code should call this function)
 
     void setTorque(double *torque);         ///< set desired joint torque
     void getJointInfo(double *position);    ///< get current joint position
@@ -67,6 +66,11 @@ public:
     bool emergencyStop() { return _emergency_stop; }        ///< whether emergency is activated
     double torqueConversion() { return _tau_cov_const; }    ///< get torque conversion constant
     double inputVoltage() { return _input_voltage; }        ///< get input voltage of this system
+
+    int readCANFrames();                    ///< try to read CAN frames (user code should call this fast enough)
+    int writeJointTorque();                 ///< send joint command via CAN comm
+    bool isJointInfoReady();                ///< return whether all joint positions are updated
+    void resetJointInfoReady();             ///< reset joint position update flag
 
 private:
     void* _can_handle;                      ///< CAN device(driver) handle

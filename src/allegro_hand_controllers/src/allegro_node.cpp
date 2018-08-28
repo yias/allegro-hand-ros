@@ -52,7 +52,6 @@ AllegroNode::AllegroNode(bool sim /* = false */) {
     canDevice = new allegro::AllegroHandDrv();
     if (canDevice->init()) {
         usleep(3000);
-        updateWriteReadCAN();
     }
     else {
         delete canDevice;
@@ -66,7 +65,7 @@ AllegroNode::AllegroNode(bool sim /* = false */) {
   // Advertise current joint state publisher and subscribe to desired joint
   // states.
   joint_state_pub = nh.advertise<sensor_msgs::JointState>(JOINT_STATE_TOPIC, 3);
-  joint_cmd_sub_ = nh.subscribe(DESIRED_STATE_TOPIC, 1, // queue size
+  joint_cmd_sub = nh.subscribe(DESIRED_STATE_TOPIC, 1, // queue size
                                 &AllegroNode::desiredStateCallback, this);
 }
 
@@ -78,7 +77,7 @@ AllegroNode::~AllegroNode() {
 
 void AllegroNode::desiredStateCallback(const sensor_msgs::JointState &msg) {
   mutex->lock();
-  desired_joint_state_ = msg;
+  desired_joint_state = msg;
   mutex->unlock();
 }
 
@@ -93,22 +92,8 @@ void AllegroNode::publishData() {
   joint_state_pub.publish(current_joint_state);
 }
 
-void AllegroNode::updateWriteReadCAN() {
-  // CAN bus communication.
-  if (canDevice) {
-    canDevice->setTorque(desired_torque);
-    lEmergencyStop = canDevice->update();
-    canDevice->getJointInfo(current_position);
-  }
-
-  if (lEmergencyStop < 0) {
-    // Stop program when Allegro Hand is switched off
-    ROS_ERROR("Allegro Hand Node is Shutting Down! (Emergency Stop)");
-    ros::shutdown();
-  }
-}
-
 void AllegroNode::updateController() {
+
   // Calculate loop time;
   tnow = ros::Time::now();
   dt = 1e-9 * (tnow - tstart).nsec;
@@ -122,35 +107,61 @@ void AllegroNode::updateController() {
 
   tstart = tnow;
 
-  // save last iteration info
-  for (int i = 0; i < DOF_JOINTS; i++) {
-    previous_position[i] = current_position[i];
-    previous_position_filtered[i] = current_position_filtered[i];
-    previous_velocity[i] = current_velocity[i];
+
+  if (canDevice)
+  {
+    // try to update joint positions through CAN comm:
+    lEmergencyStop = canDevice->readCANFrames();
+
+    // check if all positions are updated:
+    if (lEmergencyStop == 0 && canDevice->isJointInfoReady())
+    {
+      // back-up previous joint positions:
+      for (int i = 0; i < DOF_JOINTS; i++) {
+        previous_position[i] = current_position[i];
+        previous_position_filtered[i] = current_position_filtered[i];
+        previous_velocity[i] = current_velocity[i];
+      }
+
+      // update joint positions:
+      canDevice->getJointInfo(current_position);
+
+      // low-pass filtering:
+      for (int i = 0; i < DOF_JOINTS; i++) {
+        current_position_filtered[i] = (0.6 * current_position_filtered[i]) +
+                                       (0.198 * previous_position[i]) +
+                                       (0.198 * current_position[i]);
+        current_velocity[i] =
+                (current_position_filtered[i] - previous_position_filtered[i]) / dt;
+        current_velocity_filtered[i] = (0.6 * current_velocity_filtered[i]) +
+                                       (0.198 * previous_velocity[i]) +
+                                       (0.198 * current_velocity[i]);
+        current_velocity[i] = (current_position[i] - previous_position[i]) / dt;
+      }
+
+      // calculate control torque:
+      computeDesiredTorque();
+
+      // set & write torque to each joint:
+      canDevice->setTorque(desired_torque);
+      lEmergencyStop = canDevice->writeJointTorque();
+
+      // reset joint position update flag:
+      canDevice->resetJointInfoReady();
+
+      // publish joint positions to ROS topic:
+      publishData();
+
+      frame++;
+    }
   }
 
-  updateWriteReadCAN();
-
-  // Low-pass filtering.
-  for (int i = 0; i < DOF_JOINTS; i++) {
-    current_position_filtered[i] = (0.6 * current_position_filtered[i]) +
-                                   (0.198 * previous_position[i]) +
-                                   (0.198 * current_position[i]);
-    current_velocity[i] =
-            (current_position_filtered[i] - previous_position_filtered[i]) / dt;
-    current_velocity_filtered[i] = (0.6 * current_velocity_filtered[i]) +
-                                   (0.198 * previous_velocity[i]) +
-                                   (0.198 * current_velocity[i]);
-    current_velocity[i] = (current_position[i] - previous_position[i]) / dt;
+  if (lEmergencyStop < 0) {
+    // Stop program when Allegro Hand is switched off
+    ROS_ERROR("Allegro Hand Node is Shutting Down! (Emergency Stop)");
+    ros::shutdown();
   }
-
-  computeDesiredTorque();
-
-  publishData();
-
-  frame++;
 }
-
 
 // Interrupt-based control is not recommended by SimLab. I have not tested it.
 void AllegroNode::timerCallback(const ros::TimerEvent &event) {
