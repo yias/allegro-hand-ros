@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <name>epfl_allegro_launchers</name>
+  <version>0.0.0</version>
+  <description>Launch files with default settings for EPFL allegro hands.</description>
+
+  <maintainer email="to.do@epfl.ch">ToDo</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>allegro_hand</run_depend>
+
+</package>

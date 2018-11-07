@@ -1,4 +1,4 @@
-#SAH030K069R
+#SAH030C034R
 #The YAML file used by the Allegro Hand Node is named "zero.yaml"
 
 hand_info:
@@ -8,27 +8,28 @@ hand_info:
  robot_name: 'Allegro Hand'
  manufacturer: 'Wonikrobotics Co. Ltd.'
  origin: 'Seoul, South Korea'
- serial: 'SAH030K069R'
- version: v3.0
+ serial: 'SAH030C034R'
+ version: 3.0
+ input_voltage: 8
 
 zero:
  encoder_offset:
-  j00: 160
-  j01: -16878
-  j02: -24
-  j03: 483
-  j10: -440
-  j11: 379
-  j12: -17572
-  j13: -2042
-  j20: -778
-  j21: -853
-  j22: -16901
-  j23: -317
-  j30: 365
-  j31: -265
-  j32: 46
-  j33: -17650
+  j00: 867
+  j01: -106
+  j02: -643
+  j03: 39
+  j10: 146
+  j11: -1797
+  j12: -930
+  j13: 469
+  j20: 5070
+  j21: 1266
+  j22: -65
+  j23: 616
+  j30: 424
+  j31: 672
+  j32: -526
+  j33: 424
 
  encoder_direction:
   j00: +1

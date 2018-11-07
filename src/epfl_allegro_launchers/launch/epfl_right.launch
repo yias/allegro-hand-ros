@@ -1,0 +1,29 @@
+<launch>
+
+  <arg name="HAND" value="right" />
+  <arg name="NUM" default="1" />
+  <arg name="CONTROLLER" default="grasp" />
+  <arg name="RESPAWN" default="true" />
+  <arg name="VISUALIZE" default="true" />
+  <arg name="ZEROS" default="$(find allegro_hand_parameters)/zero_files/zero_SAH030K069R.yaml" />
+  <arg name="AUTO_CAN" default="true" />  <!--If true, ignores CAN_DEVICE. -->
+  <arg name="CAN_DEVICE" default="/dev/pcanusb1" />
+  <arg name="JSP_GUI" default="false" />
+  <arg name="KEYBOARD" default="true" />
+  <arg name="GAZEBO" default="false" />  <!--use at your own risk-->
+
+  <include file="$(find allegro_hand_controllers)/launch/allegro_hand.launch">
+    <arg name="HAND" value="$(arg HAND)"/>
+    <arg name="NUM" value="$(arg NUM)"/>
+    <arg name="CONTROLLER" value="$(arg CONTROLLER)"/>
+    <arg name="RESPAWN" value="$(arg RESPAWN)"/>
+    <arg name="VISUALIZE" value="$(arg VISUALIZE)"/>
+    <arg name="ZEROS" value="$(arg ZEROS)"/>
+    <arg name="AUTO_CAN" value="$(arg AUTO_CAN)"/>
+    <arg name="CAN_DEVICE" value="$(arg CAN_DEVICE)"/>
+    <arg name="JSP_GUI" value="$(arg JSP_GUI)"/>
+    <arg name="KEYBOARD" value="$(arg KEYBOARD)"/>
+    <arg name="GAZEBO" value="$(arg GAZEBO)"/>
+  </include>
+
+</launch>

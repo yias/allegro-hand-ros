@@ -124,7 +124,7 @@
   <node name="jointState2tf_$(arg NUM)"
         pkg="robot_state_publisher"
         type="state_publisher">
-    <remap from="tf" to="allegroHand_$(arg NUM)/tf"/>
+    <remap from="tf" to="allegroHand_$(arg NUM)/tf"/> 
     <remap from="joint_states" to="allegroHand_$(arg NUM)/joint_states"/>
   </node>
 
