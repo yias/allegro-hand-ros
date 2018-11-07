@@ -1,6 +1,6 @@
 # allegro_hand_ros_kinetic
 
-Unofficial fork for epfl allegro hands. The original repo is in this link https://github.com/simlabrobotics/allegro_hand_ros_catkin
+Unofficial fork for EPFL LASA allegro hands. The original repo is in this link https://github.com/simlabrobotics/allegro_hand_ros_catkin
 
 Allegro Hand ROS catkin build
 ================================
@@ -178,4 +178,14 @@ If you do not see any available files, you may need to run:
 
 from the downloaded pcan folder: this theoretically creates the devices files if
 the system has not done it automatically.
+
+Regarding the LASA allegro hands
+================================
+
+the launch command is similar to the following (depending on the hand)
+
+roslaunch epfl_allegro_launchers epfl_right.launch
+
+Known issues:
+-The rviz visualization doesn't work (currently under development).
 
