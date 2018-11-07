@@ -1,4 +1,6 @@
-# allegro_hand_ros_catkin
+# allegro_hand_ros_kinetic
+
+Unofficial fork for epfl allegro hands. The original repo is in this link https://github.com/simlabrobotics/allegro_hand_ros_catkin
 
 Allegro Hand ROS catkin build
 ================================
