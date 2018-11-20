@@ -52,6 +52,7 @@ void AllegroNodeSim::computeDesiredTorque() {
 }
 
 void AllegroNodeSim::initController(const std::string &whichHand) {
+
   // set initial position via initial_position.yaml or to default values
   if (ros::param::has("~initial_position")) {
     ROS_INFO("CTRL: Initial Pose loaded from param server.");
@@ -79,12 +80,19 @@ void AllegroNodeSim::initController(const std::string &whichHand) {
 
 }
 
+void AllegroNodeSim::updateWriteReadCAN() {
+  // Do nothing.
+}
+
 void AllegroNodeSim::doIt(bool polling) {
   // Main spin loop, uses the publisher/subscribers.
+  std::cout<<JOINT_STATE_TOPIC<<"\n";
   if (polling) {
     ROS_INFO("Polling = true.");
+    ros::Rate rate(100.0);
     while (ros::ok()) {
       updateController();
+      rate.sleep();
       ros::spinOnce();
     }
   } else {
@@ -101,6 +109,7 @@ int main(int argc, char **argv) {
   AllegroNodeSim allegroNode;
 
   bool polling = false;
+  
   if (argv[1] == std::string("true")) {
     polling = true;
   }

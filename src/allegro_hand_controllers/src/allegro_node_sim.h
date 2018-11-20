@@ -23,6 +23,8 @@ class AllegroNodeSim : public AllegroNode {
 
   void computeDesiredTorque();
 
+  void updateWriteReadCAN();
+
  protected:
 };
 

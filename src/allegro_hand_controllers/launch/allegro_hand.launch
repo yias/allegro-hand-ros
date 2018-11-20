@@ -69,9 +69,12 @@
 
   <!-- Load the robot description directly from the xacro file. (NOTE: store it
        in two parameter names.) -->
+
+<!-- command="$(find xacro)/xacro.py $(find allegro_hand_description)/allegro_hand_description_$(arg HAND).xacro" --> 
+
   <param name="robot_description"
-         command="$(find xacro)/xacro.py
-                  $(find allegro_hand_description)/allegro_hand_description_$(arg HAND).xacro"/>
+	 command="cat $(find allegro_hand_description)/allegro_hand_description_$(arg HAND).urdf" />         
+        
 
   <!-- Allegro Hand controller and communication node. -->
   <node name="allegroHand_$(arg HAND)_$(arg NUM)"
@@ -124,7 +127,7 @@
   <node name="jointState2tf_$(arg NUM)"
         pkg="robot_state_publisher"
         type="state_publisher">
-    <remap from="tf" to="allegroHand_$(arg NUM)/tf"/> 
+    <remap from="tf" to="allegroHand_$(arg NUM)/tf" /> 
     <remap from="joint_states" to="allegroHand_$(arg NUM)/joint_states"/>
   </node>
 
