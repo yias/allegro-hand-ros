@@ -1,7 +1,7 @@
 controller_list:
-  - name: fake_test_group_controller
+  - name: fake_finger1_controller
     joints:
-      - joint_0
-      - joint_1
-      - joint_2
-      - joint_3
+      - joint_0_0
+      - joint_1_0
+      - joint_2_0
+      - joint_3_0

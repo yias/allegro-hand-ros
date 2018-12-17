@@ -5,8 +5,8 @@
   <description>
      An automatically generated package with all the configuration and launch files for using the allegro_hand_right with the MoveIt! Motion Planning Framework
   </description>
-  <author email="T@T.cd">T</author>
-  <maintainer email="T@T.cd">T</maintainer>
+  <author email="iason.batzianoulis@epfl.ch">iason batzianoulis</author>
+  <maintainer email="iason.batzianoulis@epfl.ch">iason batzianoulis</maintainer>
 
   <license>BSD</license>
 
