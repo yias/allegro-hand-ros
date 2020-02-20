@@ -1,6 +1,10 @@
-# allegro_hand_ros_kinetic
+# allegro_hand_ros
 
 Unofficial fork for EPFL LASA allegro hands. The original repo is in this link https://github.com/simlabrobotics/allegro_hand_ros_catkin
+
+The "master" brancch works for ros kinetic
+
+For the melodic version, switch to the brach "melodic"
 
 Allegro Hand ROS catkin build
 ================================
