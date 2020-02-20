@@ -59,9 +59,13 @@ void AllegroNodeSim::initController(const std::string &whichHand) {
     double tmp;
     mutex->lock();
     desired_joint_state.position.resize(DOF_JOINTS);
+    desired_joint_state.velocity.resize(DOF_JOINTS);
+    desired_joint_state.effort.resize(DOF_JOINTS);
     for (int i = 0; i < DOF_JOINTS; i++) {
       ros::param::get(initialPosition[i], tmp);
       desired_joint_state.position[i] = DEGREES_TO_RADIANS(tmp);
+      desired_joint_state.velocity[i] = 0.0;
+      desired_joint_state.effort[i] = 0.0;
     }
     mutex->unlock();
   }

@@ -170,25 +170,11 @@ void AllegroNode::updateController() {
   }
 
   if(isSim){
-    // back-up previous joint positions:
-    for (int i = 0; i < DOF_JOINTS; i++) {
-        previous_position[i] = current_position[i];
-        previous_position_filtered[i] = current_position_filtered[i];
-        previous_velocity[i] = current_velocity[i];
-      }
-    // low-pass filtering:
+      // assign the desired values to the joint states, joint velocities and torques
       for (int i = 0; i < DOF_JOINTS; i++) {
-        current_position_filtered[i] = (0.6 * desired_joint_state.position[i]) +
-                                       (0.198 * previous_position[i]) +
-                                       (0.198 * current_position[i]);
-        current_velocity_filtered[i]=1.0;
-        // current_velocity[i] =
-        //         (current_position_filtered[i] - previous_position_filtered[i]) / dt;
-        // current_velocity_filtered[i] = (0.6 * desired_joint_state.velocity[i]) +
-        //                                (0.198 * previous_velocity[i]) +
-        //                                (0.198 * current_velocity[i]);
-        // current_velocity[i] = (current_position[i] - previous_position[i]) / dt;
-        desired_torque[i]=0.0;
+        current_position_filtered[i] = desired_joint_state.position[i];
+        current_velocity_filtered[i]=desired_joint_state.velocity[i];
+        desired_torque[i]=desired_joint_state.effort[i];
       }
 
       // std::cout<<"okokokokokokokokokokokokok\n";
