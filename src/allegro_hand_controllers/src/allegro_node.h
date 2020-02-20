@@ -86,6 +86,9 @@ class AllegroNode {
   // Flags
   int lEmergencyStop = 0;
   long frame = 0;
+
+  // simulation flag
+  bool isSim= false;
 };
 
 #endif //PROJECT_ALLEGRO_NODE_COMMON_H

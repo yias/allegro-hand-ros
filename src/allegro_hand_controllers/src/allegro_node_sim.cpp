@@ -48,6 +48,7 @@ void AllegroNodeSim::computeDesiredTorque() {
   // Just set current = desired.
   for (int idx = 0; idx < DOF_JOINTS; ++idx) {
     current_position[idx] = desired_joint_state.position[idx];
+    std::cout<<current_position[idx]<<" ";
   }
 }
 
@@ -79,21 +80,29 @@ void AllegroNodeSim::initController(const std::string &whichHand) {
 
 }
 
-void AllegroNodeSim::doIt(bool polling) {
+void AllegroNodeSim::doIt() {
   // Main spin loop, uses the publisher/subscribers.
-  if (polling) {
-    ROS_INFO("Polling = true.");
-    while (ros::ok()) {
-      updateController();
-      ros::spinOnce();
-    }
-  } else {
-    ROS_INFO("Polling = false.");
-
-    // Timer callback (not recommended).
-    ros::Timer timer = startTimerCallback();
-    ros::spin();
+  
+  ros::Rate rate(100.0);
+  while (ros::ok()) {
+    updateController();
+    rate.sleep();
+    ros::spinOnce();
   }
+
+  // if (polling) {
+  //   ROS_INFO("Polling = true.");
+  //   while (ros::ok()) {
+  //     updateController();
+  //     ros::spinOnce();
+  //   }
+  // } else {
+  //   ROS_INFO("Polling = false.");
+
+  //   // Timer callback (not recommended).
+  //   ros::Timer timer = startTimerCallback();
+  //   ros::spin();
+  // }
 }
 
 int main(int argc, char **argv) {
@@ -104,5 +113,5 @@ int main(int argc, char **argv) {
   if (argv[1] == std::string("true")) {
     polling = true;
   }
-  allegroNode.doIt(polling);
+  allegroNode.doIt();
 }

@@ -69,12 +69,15 @@
 
   <!-- Load the robot description directly from the xacro file. (NOTE: store it
        in two parameter names.) -->
-  <!-- <param name="robot_description"
-          command="cat $(find allegro_hand_description)/allegro_hand_description_$(arg HAND).urdf"/> -->
+  <!-- <param name="my_robot_description"
+          textfile="$(find allegro_hand_description)/allegro_hand_description_$(arg HAND)_melodic.urdf"/> -->
 
   <param name="robot_description"
+   command="cat $(find allegro_hand_description)/allegro_hand_description_$(arg HAND)_melodic.urdf" />
+
+  <!-- <param name="robot_description"
          command="$(find xacro)/xacro
-                  $(find allegro_hand_description)/allegro_hand_description_$(arg HAND).xacro"/>
+                  $(find allegro_hand_description)/allegro_hand_description_$(arg HAND).xacro"/> -->
 
   
 
@@ -129,10 +132,11 @@
   <!-- Joint States (angles) to Joint Transforms -->
   <node name="jointState2tf_$(arg NUM)"
         pkg="robot_state_publisher"
-        output="screen" 
+        output="screen"
         type="robot_state_publisher">
     <remap from="tf" to="allegroHand_$(arg NUM)/tf"/>
     <remap from="joint_states" to="allegroHand_$(arg NUM)/joint_states"/>
+    <!-- <remap from="robot_description" to="my_robot_description"/> -->
   </node>
 
 

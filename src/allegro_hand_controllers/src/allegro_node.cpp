@@ -6,12 +6,20 @@
 #include "allegro_node.h"
 #include "allegro_hand_driver/AllegroHandDrv.h"
 
+// std::string jointNames[DOF_JOINTS] =
+//         {
+//                 "joint_0.0", "joint_1.0", "joint_2.0", "joint_3.0",
+//                 "joint_4.0", "joint_5.0", "joint_6.0", "joint_7.0",
+//                 "joint_8.0", "joint_9.0", "joint_10.0", "joint_11.0",
+//                 "joint_12.0", "joint_13.0", "joint_14.0", "joint_15.0"
+//         };
+
 std::string jointNames[DOF_JOINTS] =
         {
-                "joint_0.0", "joint_1.0", "joint_2.0", "joint_3.0",
-                "joint_4.0", "joint_5.0", "joint_6.0", "joint_7.0",
-                "joint_8.0", "joint_9.0", "joint_10.0", "joint_11.0",
-                "joint_12.0", "joint_13.0", "joint_14.0", "joint_15.0"
+                "joint_0", "joint_1", "joint_2", "joint_3",
+                "joint_4", "joint_5", "joint_6", "joint_7",
+                "joint_8", "joint_9", "joint_10", "joint_11",
+                "joint_12", "joint_13", "joint_14", "joint_15"
         };
 
 
@@ -59,6 +67,10 @@ AllegroNode::AllegroNode(bool sim /* = false */) {
     }
   }
 
+  if (sim){
+    isSim=true;
+  }
+
   // Start ROS time
   tstart = ros::Time::now();
   
@@ -82,6 +94,7 @@ void AllegroNode::desiredStateCallback(const sensor_msgs::JointState &msg) {
 }
 
 void AllegroNode::publishData() {
+  // std::cout<<"test_okokokokokokokokokokok\n";
   // current position, velocity and effort (torque) published
   current_joint_state.header.stamp = tnow;
   for (int i = 0; i < DOF_JOINTS; i++) {
@@ -154,6 +167,34 @@ void AllegroNode::updateController() {
 
       frame++;
     }
+  }
+
+  if(isSim){
+    // back-up previous joint positions:
+    for (int i = 0; i < DOF_JOINTS; i++) {
+        previous_position[i] = current_position[i];
+        previous_position_filtered[i] = current_position_filtered[i];
+        previous_velocity[i] = current_velocity[i];
+      }
+    // low-pass filtering:
+      for (int i = 0; i < DOF_JOINTS; i++) {
+        current_position_filtered[i] = (0.6 * desired_joint_state.position[i]) +
+                                       (0.198 * previous_position[i]) +
+                                       (0.198 * current_position[i]);
+        current_velocity_filtered[i]=1.0;
+        // current_velocity[i] =
+        //         (current_position_filtered[i] - previous_position_filtered[i]) / dt;
+        // current_velocity_filtered[i] = (0.6 * desired_joint_state.velocity[i]) +
+        //                                (0.198 * previous_velocity[i]) +
+        //                                (0.198 * current_velocity[i]);
+        // current_velocity[i] = (current_position[i] - previous_position[i]) / dt;
+        desired_torque[i]=0.0;
+      }
+
+      // std::cout<<"okokokokokokokokokokokokok\n";
+      // publish joint positions to ROS topic:
+      publishData();
+
   }
 
   if (lEmergencyStop < 0) {

@@ -16,7 +16,7 @@ class AllegroNodeSim : public AllegroNode {
   ~AllegroNodeSim();
 
   // Main spin code: just waits for messages.
-  void doIt(bool polling = false);
+  void doIt();
 
   // Loads all gains and initial positions from the parameter server.
   void initController(const std::string &whichHand);

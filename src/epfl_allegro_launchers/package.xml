@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>epfl_allegro_launchers</name>
+  <version>0.0.0</version>
+  <description>Launch files with default settings for EPFL allegro hands.</description>
+
+  <maintainer email="iason@todo.todo">iason</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>allegro_hand</exec_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>
