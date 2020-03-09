@@ -79,7 +79,18 @@
          command="$(find xacro)/xacro
                   $(find allegro_hand_description)/allegro_hand_description_$(arg HAND).xacro"/> -->
 
+    <!--###################################################################################  -->    
+  <param name="robot_description_semantic"
+	 command="cat $(find allegro_moveit_config)/config/allegro_hand_$(arg HAND).srdf" />
   
+  <param name="robot_description_semantic"
+	 command="cat $(find allegro_moveit_config)/config/allegro_hand_left.srdf" />
+  
+  <rosparam command="load" file="$(find allegro_moveit_config)/config/kinematics.yaml" />
+  <rosparam command="load" file="$(find allegro_moveit_config)/config/ompl_planning.yaml" />
+  <rosparam command="load" file="$(find allegro_moveit_config)/config/joint_limits.yaml" />
+
+<!--###################################################################################  -->
 
   <!-- Allegro Hand controller and communication node. -->
   <node name="allegroHand_$(arg HAND)_$(arg NUM)"
