@@ -1,7 +1,0 @@
-controller_list:
-  - name: fake_finger1_controller
-    joints:
-      - joint_0_0
-      - joint_1_0
-      - joint_2_0
-      - joint_3_0
